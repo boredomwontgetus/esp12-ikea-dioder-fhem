@@ -3,7 +3,6 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266HTTPUpdateServer.h>
 
-
 // GPIO definitions for LEDs
 #define red 14
 #define green 13
@@ -59,12 +58,7 @@ void setup() {
   // Start the TCP server
   server.begin();
   Serial.println("Server started");
-
-
 }
-
-
-
 
 void loop() {
   // For push flashing only
@@ -77,22 +71,22 @@ void loop() {
   }
   
   // Wait until the client sends some data
-  Serial.println("new client");
+  // Serial.println("new client");
   while(!client.available()){
     delay(1);
   }
   
   int buflen = 8;
   byte inputbuf[buflen];
-  //client.readBytesUntil('\r', inputbuf, buflen);
   client.readBytes(inputbuf, buflen);
-  //Serial.println(req);
   client.flush();
   
+  /*
   // DEBUG
   Serial.print("Byte 0: "); Serial.println(inputbuf[0]);
   Serial.print("byte array length: "); Serial.println(sizeof(inputbuf));
   Serial.print("last byte: ");  Serial.println(inputbuf[sizeof(inputbuf) - 1]);
+  */
   
   // Find startbyte (LW12 connection of FHEM's Wifilight module)  
   int startbyte;
@@ -100,18 +94,22 @@ void loop() {
     if (inputbuf[i] == 86 and inputbuf[i + 4] == 170) {
       startbyte = i;
     }
+    /*
     // DEBUG
     Serial.print(i); Serial.print(": "); Serial.println(inputbuf[i]);
+    */
   }
 
   int redval = map(inputbuf[startbyte + 1], 0, 255, 0, colorOnRed);
   int greenval = map(inputbuf[startbyte + 2], 0, 255, 0, colorOnGreen);
   int blueval = map(inputbuf[startbyte + 3], 0, 255, 0, colorOnBlue);
 
+  /*
   // DEBUG
   Serial.print("redval: ");  Serial.println(redval);
   Serial.print("greenval: ");  Serial.println(greenval);
   Serial.print("blueval: ");  Serial.println(blueval);
+  */
 
   analogWrite(red, redval);
   analogWrite(green, greenval);
@@ -119,9 +117,8 @@ void loop() {
 
   
   client.flush();
-
   delay(1);
-  Serial.println("Client disonnected");
+  //Serial.println("Client disonnected");
 
   // The client will actually be disconnected 
   // when the function returns and 'client' object is detroyed  
