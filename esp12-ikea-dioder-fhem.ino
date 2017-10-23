@@ -114,7 +114,6 @@ void loop() {
   analogWrite(red, redval);
   analogWrite(green, greenval);
   analogWrite(blue, blueval);
-
   
   client.flush();
   delay(1);
@@ -122,9 +121,4 @@ void loop() {
 
   // The client will actually be disconnected 
   // when the function returns and 'client' object is detroyed  
-
-
-  
 }
-
-
