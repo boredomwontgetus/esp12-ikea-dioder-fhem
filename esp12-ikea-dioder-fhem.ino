@@ -27,6 +27,9 @@ ESP8266WebServer httpServer(80);
 ESP8266HTTPUpdateServer httpUpdater;
 
 void setup() {
+  // Disable WiFi AP Mode
+  WiFi.mode(WIFI_STA);
+
   pinMode(red, OUTPUT);
   pinMode(green, OUTPUT);
   pinMode(blue, OUTPUT);
